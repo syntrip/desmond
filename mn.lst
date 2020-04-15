@@ -1,0 +1,314 @@
+gpasm-0.13.7 beta               mn.asm      11-13-2012  17:43:20         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;
+               00002 ; SYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYN
+               00003 ; YN         MA    TR     T          PS    MASSYNTR          SY    P          NT
+               00004 ; N    SI     S    RI     E    YN     I    ASSYNTRI    TE     N    S    MA     R
+               00005 ; T    IS     S    IP     M    NT     S    SSYNTRIP    EM     T    I    ASS    I
+               00006 ; R    STEMASSY    PS     A    TR     T    SYNTRIPS    MASSYNTR    S    SSY    P
+               00007 ; IP        SYNT          S    RI     E           I    ASSYNTRIPSIST          PS
+               00008 ; PSISTEM     TRIPSIS     S    IP     M    NTRIPSIS    SSYNTRIP    E    YNTRIPSI
+               00009 ; S    MA     R    ST     Y    PS     A    TR     T    SYNTRIPS    M    NTRIPSIS
+               00010 ; I    AS     I    TE     N    SI     S    RI     E    YNTRIPSI    A    TRIPSIST
+               00011 ; S    SS     P    EM     T    IS     S    IP     M    NTRIPSIS    S    RIPSISTE
+               00012 ; T    SY     S    MA     R    ST     Y    PS     A    TRIPSIST    S    IPSISTEM
+               00013 ; E    YN     I    AS     I    TE     N    SI     S    RIPSISTE    Y    PSISTEMA
+               00014 ; MA         IST         IP    EM     TR         SS    IPSISTEM    N    SISTEMAS
+               00015 ; ASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASS
+               00016 ;
+               00017 ;       brother desmond proyect
+               00018 ;       raNdoM brotha signature generator
+               00019 ; by mn@d23.synlabs.com.ar
+               00020 ;       2012/13/12
+               00021 ;
+               00022 ; uc [ pic16F84A ]
+               00023 ;       RB0-RB3 output 
+               00024 ; RB0 <shift>
+               00025 ; RB1 m
+               00026 ; RB2 n
+               00027 ; RB3 <enter>
+               00028 ;
+               00029 
+Warning [215] : Processor superseded by command line.
+               00030 LIST    p=16F84a
+Warning [205] : Found directive in column 1.
+               00031 RADIX   hex
+Warning [205] : Found directive in column 1.
+002007 0000    00032 __CONFIG _XT_OSC & _WDT_OFF & _PWRTE_ON & _CP_OFF
+               00033 #INCLUDE <p16f84a.inc>
+               00001         LIST
+               00002 ; P16F84A.INC  Standard Header File, Version 2.00    Microchip Technology, Inc.
+               00134         LIST
+               00034 
+               00035 ;----------------------------------------------------------------------
+               00036 ; constants
+  0000005A     00037 row_size                equ .90
+  0000003C     00038 column_size     equ .60
+               00039 
+               00040 ;       cpu equates (memory map)
+               00041 
+  00000006     00042 portB           equ     0x06                                                    ; (p. 10 defines port address)
+               00043 
+  0000000C     00044 countR  equ     0x0c                                                    ; row count
+  0000000D     00045 countC  equ     0x0d                                                    ; column count
+  0000000E     00046 key                     equ     0x0e                                                    ;
+               00047 
+  0000000F     00048 nCount  equ     0x0f                                                    ; delay inner count
+gpasm-0.13.7 beta               mn.asm      11-13-2012  17:43:20         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+  000000A0     00049 mCount  equ     0xa0                                                    ; delay outter count
+               00050 
+               00051 ;----------------------------------------------------------------------
+               00052 
+               00053 ;----------------------------------------------------------------------
+               00054 ;       main
+               00055 
+               00056         org     0x000
+               00057 
+0000 3000      00058 start           movlw   0x00                                            ; load W with 0x00 make port B output (p. 45)
+Warning [224] : Use of this instruction is not recommended.
+0001 0066      00059         tris    portB                                                                   ; copy W tristate, port B outputs (p. 58)
+0002 0186      00060         clrf    portB                                                                   ; clear all lines low
+0003 3001      00061         movlw   0x01
+0004 008E      00062         movwf key                                                                               ; initialice key
+0005 305A      00063         movlw   row_size
+0006 008C      00064         movwf countR                                                                    ; initialice countR
+               00065 
+0007 2000      00066         call    pause                                                                   ; delay by subroutine
+0008 2000      00067         call    pause           
+0009 2000      00068         call    pause
+000A 2000      00069         call    pause
+000B 2000      00070         call    pause                                                                   ; five pause executions equals ~ 1 second
+               00071 
+000C 00072 newRow
+000C 303C      00073         movlw   column_size
+000D 008D      00074         movwf countC                                                                    ; initialice countC
+               00075 
+000E 00076 newColumn
+000E 2000      00077         call press_key
+000F 0B8D      00078         decfsz countC, f
+0010 2800      00079         goto newColumn
+0011 2000      00080         call press_enter
+0012 0B8C      00081         decfsz countR, f
+0013 2800      00082         goto newRow
+0014 2800      00083         goto stop
+               00084 
+0015 2800      00085 stop    goto    stop
+               00086 
+               00087 ;----------------------------------------------------------------------
+               00088 ;       subroutines
+               00089 
+0016 00090 press_key
+0016 080E      00091         movfw key
+0017 3A01      00092         xorlw 1
+0018 1903 2800 00093         bz press_m                                                                      ; btfsc STATUS, Z ; goto LABEL1 ; If SWITCH = CASE1, jump to LABEL1
+001A 080E      00094         movfw key
+001B 3A02      00095         xorlw 2
+001C 1903 2800 00096         bz press_n
+001E 080E      00097         movfw key
+001F 3A03      00098         xorlw 3
+0020 1903 2800 00099         bz press_shift_m
+0022 080E      00100         movfw key
+0023 3A04      00101         xorlw 4
+gpasm-0.13.7 beta               mn.asm      11-13-2012  17:43:20         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0024 1903 2800 00102         bz press_shift_n
+               00103 
+0026 00104 press_m
+0026 0A8E      00105         incf key, f
+0027 3002      00106         movlw 0x02                                                                      ; [m] RB1 1 250ms 0 1000ms
+Warning [203] : Found opcode in column 1.
+0028 2800      00107 goto press
+               00108 
+0029 00109 press_n
+0029 0A8E      00110         incf key, f
+002A 3004      00111         movlw 0x04                                                                      ; [n] RB2 1 250ms 0 1000ms
+Warning [203] : Found opcode in column 1.
+002B 2800      00112 goto press
+               00113 
+002C 00114 press_shift_m
+002C 0A8E      00115         incf key, f
+002D 3003      00116         movlw 0x03                                                                      ; [M] RB0+RB1 1 250ms 0 1000ms
+Warning [203] : Found opcode in column 1.
+002E 2800      00117 goto press
+               00118 
+002F 00119 press_shift_n
+002F 3001      00120         movlw 0x01
+0030 008E      00121         movwf key
+0031 3005      00122         movlw 0x05                                                                      ; [N] RB0+RB2 1 250ms 0 1000ms
+Warning [203] : Found opcode in column 1.
+0032 2800      00123 goto press
+               00124 
+0033 00125 press
+0033 0086      00126         movwf portB
+0034 2000      00127         call    pause100ms
+0035 0186      00128         clrf    portB
+0036 2000      00129         call    pause100ms                                              ;
+Warning [203] : Found opcode in column 1.
+0037 0008      00130 return
+               00131 
+               00132 
+0038 00133 press_enter
+0038 3008      00134         movlw 0x08                                                                      ; [enter] RB3 1 250ms 0 1000ms
+0039 0086      00135         movwf portB
+003A 2000      00136         call    pause           
+003B 0186      00137         clrf    portB
+003C 2000      00138         call    pause1000ms
+003D 2000      00139         call    pause1000ms
+003E 2000      00140         call    pause1000ms
+003F 2000      00141         call    pause1000ms                                             ;
+Warning [203] : Found opcode in column 1.
+0040 0008      00142 return
+               00143 
+0041 00144 pause1000ms
+0041 2000      00145         call    pause
+0042 2000      00146         call    pause
+0043 2000      00147         call    pause
+0044 2000      00148         call    pause                                                                   ;
+Warning [203] : Found opcode in column 1.
+gpasm-0.13.7 beta               mn.asm      11-13-2012  17:43:20         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0045 0008      00149 return
+               00150 
+               00151 ; pause ~100ms
+0046 3064      00152 pause100ms      movlw   .100                                    ; set w = 100 decimal
+0047 00A0      00153         movwf           mCount                                                  ; mCount = w
+0048 30FF      00154 loadN100        movlw   0xff                                    ; set w = 255 decimal
+0049 008F      00155         movwf           nCount                                                  ; nCount = w
+004A 0B8F      00156 decN100         decfsz  nCount, f               ; nCount--
+004B 2800      00157         goto            decN100                                                 ; if nCount != 0 then repeat nCount--
+004C 0BA0      00158         decfsz  mCount, f                                               ; else decrement Count
+004D 2800      00159         goto            loadN100                                                ; if mCount != 0 then 
+               00160                                                                                                                         ;   reload nCount to 255 and decrement
+004E 0008      00161         return                                                                                  ; else exit subroutine
+               00162 
+               00163 ; pause ~250ms
+004F 30FF      00164 pause                   movlw   0xff                                    ; set w = 255 decimal
+0050 00A0      00165         movwf           mCount                                                  ; mCount = w
+0051 30FF      00166 loadN                   movlw   0xff                                    ; set w = 255 decimal
+0052 008F      00167         movwf           nCount                                                  ; nCount = w
+0053 0B8F      00168 decN                    decfsz  nCount, f               ; nCount--
+0054 2800      00169         goto            decN                                                            ; if nCount != 0 then repeat nCount--
+0055 0BA0      00170         decfsz  mCount, f                                               ; else decrement Count
+0056 2800      00171         goto            loadN                                                           ; if mCount != 0 then 
+               00172                                                                                                                         ;   reload nCount to 255 and decrement
+0057 0008      00173         return                                                                                  ; else exit subroutine
+               00174 
+gpasm-0.13.7 beta               mn.asm      11-13-2012  17:43:20         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_HS_OSC                           00003FFE
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+gpasm-0.13.7 beta               mn.asm      11-13-2012  17:43:20         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+column_size                       0000003C
+countC                            0000000D
+countR                            0000000C
+decN                              00000053
+decN100                           0000004A
+key                               0000000E
+loadN                             00000051
+loadN100                          00000048
+mCount                            000000A0
+nCount                            0000000F
+newColumn                         0000000E
+newRow                            0000000C
+pause                             0000004F
+pause1000ms                       00000041
+pause100ms                        00000046
+portB                             00000006
+press                             00000033
+press_enter                       00000038
+press_key                         00000016
+press_m                           00000026
+press_n                           00000029
+press_shift_m                     0000002C
+press_shift_n                     0000002F
+row_size                          0000005A
+start                             00000000
+stop                              00000015
+
+
+Errors   :       0
+Warnings :      11 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

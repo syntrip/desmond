@@ -1,0 +1,188 @@
+gpasm-0.13.7 beta               test_npn_only.asm11-13-2012  10:10:25         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;
+               00002 ; SYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYN
+               00003 ; YN         MA    TR     T          PS    MASSYNTR          SY    P          NT
+               00004 ; N    SI     S    RI     E    YN     I    ASSYNTRI    TE     N    S    MA     R
+               00005 ; T    IS     S    IP     M    NT     S    SSYNTRIP    EM     T    I    ASS    I
+               00006 ; R    STEMASSY    PS     A    TR     T    SYNTRIPS    MASSYNTR    S    SSY    P
+               00007 ; IP        SYNT          S    RI     E           I    ASSYNTRIPSIST          PS
+               00008 ; PSISTEM     TRIPSIS     S    IP     M    NTRIPSIS    SSYNTRIP    E    YNTRIPSI
+               00009 ; S    MA     R    ST     Y    PS     A    TR     T    SYNTRIPS    M    NTRIPSIS
+               00010 ; I    AS     I    TE     N    SI     S    RI     E    YNTRIPSI    A    TRIPSIST
+               00011 ; S    SS     P    EM     T    IS     S    IP     M    NTRIPSIS    S    RIPSISTE
+               00012 ; T    SY     S    MA     R    ST     Y    PS     A    TRIPSIST    S    IPSISTEM
+               00013 ; E    YN     I    AS     I    TE     N    SI     S    RIPSISTE    Y    PSISTEMA
+               00014 ; MA         IST         IP    EM     TR         SS    IPSISTEM    N    SISTEMAS
+               00015 ; ASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASS
+               00016 ;
+               00017 ;       brother desmond proyect
+               00018 ;       test npn bjt
+               00019 ; by mn@d23.synlabs.com.ar
+               00020 ;       2012/11/12
+               00021 ;
+               00022 ; uc [ pic16F84A ]
+               00023 ;       RB0 output 9/10s OFF 1/10 ON cycle
+               00024 ;
+               00025 
+Warning [215] : Processor superseded by command line.
+               00026 LIST    p=16F84a
+Warning [205] : Found directive in column 1.
+               00027 RADIX   hex
+Warning [205] : Found directive in column 1.
+002007 0000    00028 __CONFIG _XT_OSC & _WDT_OFF & _PWRTE_ON & _CP_OFF
+               00029 #INCLUDE <p16f84a.inc>
+               00001         LIST
+               00002 ; P16F84A.INC  Standard Header File, Version 2.00    Microchip Technology, Inc.
+               00134         LIST
+               00030 
+               00031 ;----------------------------------------------------------------------
+               00032 ;       cpu equates (memory map)
+               00033 
+  00000006     00034 portB           equ     0x06                                                    ; (p. 10 defines port address)
+  0000000D     00035 nCount  equ     0x0d
+  0000000E     00036 mCount  equ     0x0e
+               00037 
+               00038 ;----------------------------------------------------------------------
+               00039 
+               00040 ;----------------------------------------------------------------------
+               00041 ;       main
+               00042 
+               00043         org     0x000
+               00044 
+0000 3000      00045 start           movlw   0x00                                            ; load W with 0x00 make port B output (p. 45)
+Warning [224] : Use of this instruction is not recommended.
+0001 0066      00046         tris    portB                                                                   ; copy W tristate, port B outputs (p. 58)
+0002 0186      00047         clrf    portB                                                                   ; clear all lines
+gpasm-0.13.7 beta               test_npn_only.asm11-13-2012  10:10:25         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0003 2000      00048         call    pause                                                                   ; delay by subroutine
+0004 2000      00049         call    pause           
+0005 2000      00050         call    pause
+0006 2000      00051         call    pause
+0007 2000      00052         call    pause                                                                   ; five pause executions equals ~ 1 second
+               00053 
+0008 00054 blink
+0008 0186      00055         clrf    portB
+0009 2000      00056         call    pause           
+000A 2000      00057         call    pause
+000B 2000      00058         call    pause
+000C 2000      00059         call    pause
+000D 2000      00060         call    pause
+000E 2000      00061         call    pause           
+000F 2000      00062         call    pause
+0010 2000      00063         call    pause
+0011 2000      00064         call    pause
+0012 3001      00065         movlw 0x01                                                                      ; RB1 1 1800ms 0 200ms
+0013 0086      00066         movwf portB
+0014 2000      00067         call    pause                                                                   ; inf cycle
+Warning [203] : Found opcode in column 1.
+0015 2800      00068 goto blink
+               00069 
+               00070 ;----------------------------------------------------------------------
+               00071 ;       subroutines
+               00072 
+               00073 ; pause ~250ms
+0016 30FF      00074 pause                   movlw   0xff                                    ; set w = 255 decimal
+0017 008E      00075         movwf           mCount                                                  ; mCount = w
+0018 30FF      00076 loadN                   movlw   0xff                                    ; set w = 255 decimal
+0019 008D      00077         movwf           nCount                                                  ; nCount = w
+001A 0B8D      00078 decN                    decfsz  nCount, f               ; nCount--
+001B 2800      00079         goto            decN                                                            ; if nCount != 0 then repeat nCount--
+001C 0B8E      00080         decfsz  mCount, f                                               ; else decrement Count
+001D 2800      00081         goto            loadN                                                           ; if mCount != 0 then 
+               00082                                                                                                                         ;   reload nCount to 255 and decrement
+001E 0008      00083         return                                                                                  ; else exit subroutine
+               00084 
+gpasm-0.13.7 beta               test_npn_only.asm11-13-2012  10:10:25         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_HS_OSC                           00003FFE
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+gpasm-0.13.7 beta               test_npn_only.asm11-13-2012  10:10:25         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+blink                             00000008
+decN                              0000001A
+loadN                             00000018
+mCount                            0000000E
+nCount                            0000000D
+pause                             00000016
+portB                             00000006
+start                             00000000
+
+
+Errors   :       0
+Warnings :       5 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+

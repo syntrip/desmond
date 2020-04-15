@@ -1,0 +1,158 @@
+gplink-0.13.7 beta
+Copyright (c) 1998-2005 gputils project
+Listing File Generated: 11-12-2012  14:36:49
+ 
+ 
+Address  Value    Disassembly              Source
+-------  -----    -----------              ------
+                                           ;
+                                           ; [ ASCII ART LOGO ]
+                                           ;
+                                           ;	brother desmond proyect
+                                           ;	hello world
+                                           ; by mn@d23.synlabs.com.ar
+                                           ;	2012/11/12
+                                           ;
+                                           ; uc [ pic16F84A ]
+                                           ;	RB0-RB7 output 1/5s ON 4/5 OFF sequential sweep/cycle
+                                           ;
+                                           
+                                           LIST 	p=16F84a
+                                           RADIX	hex
+                                           __CONFIG _XT_OSC & _WDT_OFF & _PWRTE_ON & _CP_OFF
+                                           #INCLUDE <p16f84a.inc>
+                                                   LIST
+                                           ; P16F84A.INC  Standard Header File, Version 2.00    Microchip Technology, Inc.
+                                                   NOLIST
+                                           
+                                           ;----------------------------------------------------------------------
+                                           ;	cpu equates (memory map)
+                                           
+                                           portB		equ	0x06							; (p. 10 defines port address)
+                                           count		equ	0x0c
+                                           nCount	equ	0x0d
+                                           mCount	equ	0x0e
+                                           
+                                           ;----------------------------------------------------------------------
+                                           
+                                           ;----------------------------------------------------------------------
+                                           ;	main
+                                           
+                                           	org	0x000
+                                           
+000000   3000     movlw	0                  start		movlw	0x00						; load W with 0x00 make port B output (p. 45)
+000001   0066     tris	0x66                	tris	portB									; copy W tristate, port B outputs (p. 58)
+000002   0186     clrf	0x6                 	clrf	portB									; clear all lines low
+000003   018c     clrf	0xc                 	clrf	count									; initialize counter to 0
+000004   080c     movf	0xc, w              get_cnt	movf	count, w				; move count to W
+000005   0086     movwf	0x6                	movwf	portB									; move W to port B
+000006   2056     call	0x56                	call	pause									; delay by subroutine
+000007   2056     call	0x56                	call	pause		
+000008   2056     call	0x56                	call	pause
+000009   2056     call	0x56                	call	pause
+00000a   2056     call	0x56                	call	pause									; five pause executions equals ~ 1 second
+                                           
+00000b   3001     movlw	0x1                	movlw 0x01									; [s] RB0 1 200ms 0 800ms
+00000c   0086     movwf	0x6                	movwf portB
+00000d   2056     call	0x56                	call	pause		
+00000e   0186     clrf	0x6                 	clrf	portB
+00000f   2056     call	0x56                	call	pause
+000010   2056     call	0x56                	call	pause
+000011   2056     call	0x56                	call	pause
+000012   2056     call	0x56                	call	pause									; end first character
+                                           
+000013   3002     movlw	0x2                	movlw 0x02									; [y] RB1 1 200ms 0 800ms
+000014   0086     movwf	0x6                	movwf portB
+000015   2056     call	0x56                	call	pause		
+000016   0186     clrf	0x6                 	clrf	portB
+000017   2056     call	0x56                	call	pause
+000018   2056     call	0x56                	call	pause
+000019   2056     call	0x56                	call	pause
+00001a   2056     call	0x56                	call	pause									; end 2nd character
+                                           
+00001b   3004     movlw	0x4                	movlw 0x04									; [n] RB2 1 200ms 0 800ms
+00001c   0086     movwf	0x6                	movwf portB
+00001d   2056     call	0x56                	call	pause		
+00001e   0186     clrf	0x6                 	clrf	portB
+00001f   2056     call	0x56                	call	pause
+000020   2056     call	0x56                	call	pause
+000021   2056     call	0x56                	call	pause
+000022   2056     call	0x56                	call	pause									; end 3rd character
+                                           
+000023   3008     movlw	0x8                	movlw 0x08									; [t] RB3 1 200ms 0 800ms
+000024   0086     movwf	0x6                	movwf portB
+000025   2056     call	0x56                	call	pause		
+000026   0186     clrf	0x6                 	clrf	portB
+000027   2056     call	0x56                	call	pause
+000028   2056     call	0x56                	call	pause
+000029   2056     call	0x56                	call	pause
+00002a   2056     call	0x56                	call	pause									; end 4th character
+                                           
+00002b   284d     goto	0x4d                	goto	break									; XXX test break jump
+                                           
+00002c   3010     movlw	0x10               	movlw 0x10									; [r] RB4 1 200ms 0 800ms
+00002d   0086     movwf	0x6                	movwf portB
+00002e   2056     call	0x56                	call	pause		
+00002f   0186     clrf	0x6                 	clrf	portB
+000030   2056     call	0x56                	call	pause
+000031   2056     call	0x56                	call	pause
+000032   2056     call	0x56                	call	pause
+000033   2056     call	0x56                	call	pause									; end 5th character
+                                           
+000034   3020     movlw	0x20               	movlw 0x20									; [i] RB5 1 200ms 0 800ms
+000035   0086     movwf	0x6                	movwf portB
+000036   2056     call	0x56                	call	pause		
+000037   0186     clrf	0x6                 	clrf	portB
+000038   2056     call	0x56                	call	pause
+000039   2056     call	0x56                	call	pause
+00003a   2056     call	0x56                	call	pause
+00003b   2056     call	0x56                	call	pause									; end 6th character
+                                           
+00003c   3040     movlw	0x40               	movlw 0x40									; [p] RB6 1 200ms 0 800ms
+00003d   0086     movwf	0x6                	movwf portB
+00003e   2056     call	0x56                	call	pause		
+00003f   0186     clrf	0x6                 	clrf	portB
+000040   2056     call	0x56                	call	pause
+000041   2056     call	0x56                	call	pause
+000042   2056     call	0x56                	call	pause
+000043   2056     call	0x56                	call	pause									; end 7th character
+                                           
+000044   3080     movlw	0x80               	movlw 0x80									; [.] RB7 1 200ms 0 800ms
+000045   0086     movwf	0x6                	movwf portB
+000046   2056     call	0x56                	call	pause		
+000047   0186     clrf	0x6                 	clrf	portB
+000048   2056     call	0x56                	call	pause
+000049   2056     call	0x56                	call	pause
+00004a   2056     call	0x56                	call	pause
+00004b   2056     call	0x56                	call	pause									; end last character
+                                           
+00004c   284c     goto	0x4c                stop	goto	stop
+                                           
+                                           break
+                                           blink
+00004d   300f     movlw	0xf                	movlw 0x0F									; RB0-RB3 1 200ms 0 800ms
+00004e   0086     movwf	0x6                	movwf portB
+00004f   2056     call	0x56                	call	pause		
+000050   0186     clrf	0x6                 	clrf	portB
+000051   2056     call	0x56                	call	pause
+000052   2056     call	0x56                	call	pause
+000053   2056     call	0x56                	call	pause
+000054   2056     call	0x56                	call	pause									; inf cycle
+000055   284d     goto	0x4d                goto blink
+                                           
+                                           ;----------------------------------------------------------------------
+                                           ;	subroutines
+                                           
+                                           ; pause ~250ms
+000056   30ff     movlw	0xff               pause			movlw	0xff					; set w = 255 decimal
+000057   008e     movwf	0xe                	movwf		mCount							; mCount = w
+000058   30ff     movlw	0xff               loadN			movlw	0xff					; set w = 255 decimal
+000059   008d     movwf	0xd                	movwf		nCount							; nCount = w
+00005a   0b8d     decfsz	0xd, f            decN			decfsz	nCount, f		; nCount--
+00005b   285a     goto	0x5a                	goto		decN								; if nCount != 0 then repeat nCount--
+00005c   0b8e     decfsz	0xe, f            	decfsz	mCount, f						; else decrement Count
+00005d   2858     goto	0x58                	goto		loadN								; if mCount != 0 then 
+                                           															;   reload nCount to 255 and decrement
+00005e   0008     return                   	return											; else exit subroutine
+                                           
+                                           	end

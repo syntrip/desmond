@@ -1,2 +1,2 @@
 # desmond
-typewriter from hell
+typewriters from hell

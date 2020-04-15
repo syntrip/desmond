@@ -1,0 +1,189 @@
+gplink-0.13.7 beta
+Copyright (c) 1998-2005 gputils project
+Listing File Generated: 11-13-2012  17:43:20
+ 
+ 
+Address  Value    Disassembly              Source
+-------  -----    -----------              ------
+                                           ;
+                                           ; SYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYN
+                                           ; YN         MA    TR     T          PS    MASSYNTR          SY    P          NT
+                                           ; N    SI     S    RI     E    YN     I    ASSYNTRI    TE     N    S    MA     R
+                                           ; T    IS     S    IP     M    NT     S    SSYNTRIP    EM     T    I    ASS    I
+                                           ; R    STEMASSY    PS     A    TR     T    SYNTRIPS    MASSYNTR    S    SSY    P
+                                           ; IP        SYNT          S    RI     E           I    ASSYNTRIPSIST          PS
+                                           ; PSISTEM     TRIPSIS     S    IP     M    NTRIPSIS    SSYNTRIP    E    YNTRIPSI
+                                           ; S    MA     R    ST     Y    PS     A    TR     T    SYNTRIPS    M    NTRIPSIS
+                                           ; I    AS     I    TE     N    SI     S    RI     E    YNTRIPSI    A    TRIPSIST
+                                           ; S    SS     P    EM     T    IS     S    IP     M    NTRIPSIS    S    RIPSISTE
+                                           ; T    SY     S    MA     R    ST     Y    PS     A    TRIPSIST    S    IPSISTEM
+                                           ; E    YN     I    AS     I    TE     N    SI     S    RIPSISTE    Y    PSISTEMA
+                                           ; MA         IST         IP    EM     TR         SS    IPSISTEM    N    SISTEMAS
+                                           ; ASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASS
+                                           ;
+                                           ;	brother desmond proyect
+                                           ;	raNdoM brotha signature generator
+                                           ; by mn@d23.synlabs.com.ar
+                                           ;	2012/13/12
+                                           ;
+                                           ; uc [ pic16F84A ]
+                                           ;	RB0-RB3 output 
+                                           ; RB0 <shift>
+                                           ; RB1 m
+                                           ; RB2 n
+                                           ; RB3 <enter>
+                                           ;
+                                           
+                                           LIST 	p=16F84a
+                                           RADIX	hex
+                                           __CONFIG _XT_OSC & _WDT_OFF & _PWRTE_ON & _CP_OFF
+                                           #INCLUDE <p16f84a.inc>
+                                                   LIST
+                                           ; P16F84A.INC  Standard Header File, Version 2.00    Microchip Technology, Inc.
+                                                   NOLIST
+                                           
+                                           ;----------------------------------------------------------------------
+                                           ; constants
+                                           row_size		equ .90
+                                           column_size	equ .60
+                                           
+                                           ;	cpu equates (memory map)
+                                           
+                                           portB		equ	0x06							; (p. 10 defines port address)
+                                           
+                                           countR	equ	0x0c							; row count
+                                           countC	equ	0x0d							; column count
+                                           key			equ	0x0e							;
+                                           
+                                           nCount	equ	0x0f							; delay inner count
+                                           mCount	equ	0xa0							; delay outter count
+                                           
+                                           ;----------------------------------------------------------------------
+                                           
+                                           ;----------------------------------------------------------------------
+                                           ;	main
+                                           
+                                           	org	0x000
+                                           
+000000   3000     movlw	0                  start		movlw	0x00						; load W with 0x00 make port B output (p. 45)
+000001   0066     tris	0x66                	tris	portB									; copy W tristate, port B outputs (p. 58)
+000002   0186     clrf	0x6                 	clrf	portB									; clear all lines low
+000003   3001     movlw	0x1                	movlw	0x01
+000004   008e     movwf	0xe                	movwf key										; initialice key
+000005   305a     movlw	0x5a               	movlw	row_size
+000006   008c     movwf	0xc                	movwf countR									; initialice countR
+                                           
+000007   204f     call	0x4f                	call	pause									; delay by subroutine
+000008   204f     call	0x4f                	call	pause		
+000009   204f     call	0x4f                	call	pause
+00000a   204f     call	0x4f                	call	pause
+00000b   204f     call	0x4f                	call	pause									; five pause executions equals ~ 1 second
+                                           
+                                           newRow
+00000c   303c     movlw	0x3c               	movlw	column_size
+00000d   008d     movwf	0xd                	movwf countC									; initialice countC
+                                           
+                                           newColumn
+00000e   2016     call	0x16                	call press_key
+00000f   0b8d     decfsz	0xd, f            	decfsz countC, f
+000010   280e     goto	0xe                 	goto newColumn
+000011   2038     call	0x38                	call press_enter
+000012   0b8c     decfsz	0xc, f            	decfsz countR, f
+000013   280c     goto	0xc                 	goto newRow
+000014   2815     goto	0x15                	goto stop
+                                           
+000015   2815     goto	0x15                stop	goto	stop
+                                           
+                                           ;----------------------------------------------------------------------
+                                           ;	subroutines
+                                           
+                                           press_key
+000016   080e     movf	0xe, w              	movfw key
+000017   3a01     xorlw	0x1                	xorlw 1
+000018   1903     btfsc	0x3, 0x2           	bz press_m									; btfsc STATUS, Z ; goto LABEL1 ; If SWITCH = CASE1, jump to LABEL1
+000019   2826     goto	0x26                
+00001a   080e     movf	0xe, w              	movfw key
+00001b   3a02     xorlw	0x2                	xorlw 2
+00001c   1903     btfsc	0x3, 0x2           	bz press_n
+00001d   2829     goto	0x29                
+00001e   080e     movf	0xe, w              	movfw key
+00001f   3a03     xorlw	0x3                	xorlw 3
+000020   1903     btfsc	0x3, 0x2           	bz press_shift_m
+000021   282c     goto	0x2c                
+000022   080e     movf	0xe, w              	movfw key
+000023   3a04     xorlw	0x4                	xorlw 4
+000024   1903     btfsc	0x3, 0x2           	bz press_shift_n
+000025   282f     goto	0x2f                
+                                           
+                                           press_m
+000026   0a8e     incf	0xe, f              	incf key, f
+000027   3002     movlw	0x2                	movlw 0x02									; [m] RB1 1 250ms 0 1000ms
+000028   2833     goto	0x33                goto press
+                                           
+                                           press_n
+000029   0a8e     incf	0xe, f              	incf key, f
+00002a   3004     movlw	0x4                	movlw 0x04									; [n] RB2 1 250ms 0 1000ms
+00002b   2833     goto	0x33                goto press
+                                           
+                                           press_shift_m
+00002c   0a8e     incf	0xe, f              	incf key, f
+00002d   3003     movlw	0x3                	movlw 0x03									; [M] RB0+RB1 1 250ms 0 1000ms
+00002e   2833     goto	0x33                goto press
+                                           
+                                           press_shift_n
+00002f   3001     movlw	0x1                	movlw 0x01
+000030   008e     movwf	0xe                	movwf key
+000031   3005     movlw	0x5                	movlw 0x05									; [N] RB0+RB2 1 250ms 0 1000ms
+000032   2833     goto	0x33                goto press
+                                           
+                                           press
+000033   0086     movwf	0x6                	movwf portB
+000034   2046     call	0x46                	call	pause100ms
+000035   0186     clrf	0x6                 	clrf	portB
+000036   2046     call	0x46                	call	pause100ms						;
+000037   0008     return                   return
+                                           
+                                           
+                                           press_enter
+000038   3008     movlw	0x8                	movlw 0x08									; [enter] RB3 1 250ms 0 1000ms
+000039   0086     movwf	0x6                	movwf portB
+00003a   204f     call	0x4f                	call	pause		
+00003b   0186     clrf	0x6                 	clrf	portB
+00003c   2041     call	0x41                	call	pause1000ms
+00003d   2041     call	0x41                	call	pause1000ms
+00003e   2041     call	0x41                	call	pause1000ms
+00003f   2041     call	0x41                	call	pause1000ms						;
+000040   0008     return                   return
+                                           
+                                           pause1000ms
+000041   204f     call	0x4f                	call	pause
+000042   204f     call	0x4f                	call	pause
+000043   204f     call	0x4f                	call	pause
+000044   204f     call	0x4f                	call	pause									;
+000045   0008     return                   return
+                                           
+                                           ; pause ~100ms
+000046   3064     movlw	0x64               pause100ms	movlw	.100					; set w = 100 decimal
+000047   00a0     movwf	0x20               	movwf		mCount							; mCount = w
+000048   30ff     movlw	0xff               loadN100	movlw	0xff					; set w = 255 decimal
+000049   008f     movwf	0xf                	movwf		nCount							; nCount = w
+00004a   0b8f     decfsz	0xf, f            decN100		decfsz	nCount, f		; nCount--
+00004b   284a     goto	0x4a                	goto		decN100							; if nCount != 0 then repeat nCount--
+00004c   0ba0     decfsz	0x20, f           	decfsz	mCount, f						; else decrement Count
+00004d   2848     goto	0x48                	goto		loadN100						; if mCount != 0 then 
+                                           															;   reload nCount to 255 and decrement
+00004e   0008     return                   	return											; else exit subroutine
+                                           
+                                           ; pause ~250ms
+00004f   30ff     movlw	0xff               pause			movlw	0xff					; set w = 255 decimal
+000050   00a0     movwf	0x20               	movwf		mCount							; mCount = w
+000051   30ff     movlw	0xff               loadN			movlw	0xff					; set w = 255 decimal
+000052   008f     movwf	0xf                	movwf		nCount							; nCount = w
+000053   0b8f     decfsz	0xf, f            decN			decfsz	nCount, f		; nCount--
+000054   2853     goto	0x53                	goto		decN								; if nCount != 0 then repeat nCount--
+000055   0ba0     decfsz	0x20, f           	decfsz	mCount, f						; else decrement Count
+000056   2851     goto	0x51                	goto		loadN								; if mCount != 0 then 
+                                           															;   reload nCount to 255 and decrement
+000057   0008     return                   	return											; else exit subroutine
+                                           
+                                           end

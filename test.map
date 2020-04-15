@@ -1,0 +1,39 @@
+gplink-0.13.7 beta
+Map File - Created 11-13-2012  17:43:20
+ 
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   00000000    program   0x0000b0
+                  .config       code   0x002007    program   0x000002
+ 
+                              Program Memory Usage
+                               Start         End
+                           ---------   ---------
+                            0x002007    0x002007
+                            00000000    0x000057
+ 
+                            89 program addresses used
+ 
+                              Symbols
+                     Name    Address   Location    Storage File
+                ---------  ---------  ---------  --------- ---------
+                    start   00000000    program     static mn.asm
+                   newRow   0x00000c    program     static mn.asm
+                newColumn   0x00000e    program     static mn.asm
+                     stop   0x000015    program     static mn.asm
+                press_key   0x000016    program     static mn.asm
+                  press_m   0x000026    program     static mn.asm
+                  press_n   0x000029    program     static mn.asm
+            press_shift_m   0x00002c    program     static mn.asm
+            press_shift_n   0x00002f    program     static mn.asm
+                    press   0x000033    program     static mn.asm
+              press_enter   0x000038    program     static mn.asm
+              pause1000ms   0x000041    program     static mn.asm
+               pause100ms   0x000046    program     static mn.asm
+                 loadN100   0x000048    program     static mn.asm
+                  decN100   0x00004a    program     static mn.asm
+                    pause   0x00004f    program     static mn.asm
+                    loadN   0x000051    program     static mn.asm
+                     decN   0x000053    program     static mn.asm
+ 

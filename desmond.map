@@ -1,0 +1,29 @@
+gplink-0.13.7 beta
+Map File - Created 11-12-2012  14:36:49
+ 
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   00000000    program   0x0000be
+                  .config       code   0x002007    program   0x000002
+ 
+                              Program Memory Usage
+                               Start         End
+                           ---------   ---------
+                            0x002007    0x002007
+                            00000000    0x00005e
+ 
+                            96 program addresses used
+ 
+                              Symbols
+                     Name    Address   Location    Storage File
+                ---------  ---------  ---------  --------- ---------
+                    start   00000000    program     static syntrip.asm
+                  get_cnt   0x000004    program     static syntrip.asm
+                     stop   0x00004c    program     static syntrip.asm
+                    break   0x00004d    program     static syntrip.asm
+                    blink   0x00004d    program     static syntrip.asm
+                    pause   0x000056    program     static syntrip.asm
+                    loadN   0x000058    program     static syntrip.asm
+                     decN   0x00005a    program     static syntrip.asm
+ 

@@ -1,0 +1,280 @@
+gpasm-0.13.7 beta               syntrip.asm 11-12-2012  17:30:49         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+               00001 ;
+               00002 ; SYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYN
+               00003 ; YN         MA    TR     T          PS    MASSYNTR          SY    P          NT
+               00004 ; N    SI     S    RI     E    YN     I    ASSYNTRI    TE     N    S    MA     R
+               00005 ; T    IS     S    IP     M    NT     S    SSYNTRIP    EM     T    I    ASS    I
+               00006 ; R    STEMASSY    PS     A    TR     T    SYNTRIPS    MASSYNTR    S    SSY    P
+               00007 ; IP        SYNT          S    RI     E           I    ASSYNTRIPSIST          PS
+               00008 ; PSISTEM     TRIPSIS     S    IP     M    NTRIPSIS    SSYNTRIP    E    YNTRIPSI
+               00009 ; S    MA     R    ST     Y    PS     A    TR     T    SYNTRIPS    M    NTRIPSIS
+               00010 ; I    AS     I    TE     N    SI     S    RI     E    YNTRIPSI    A    TRIPSIST
+               00011 ; S    SS     P    EM     T    IS     S    IP     M    NTRIPSIS    S    RIPSISTE
+               00012 ; T    SY     S    MA     R    ST     Y    PS     A    TRIPSIST    S    IPSISTEM
+               00013 ; E    YN     I    AS     I    TE     N    SI     S    RIPSISTE    Y    PSISTEMA
+               00014 ; MA         IST         IP    EM     TR         SS    IPSISTEM    N    SISTEMAS
+               00015 ; ASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASSYNTRIPSISTEMASS
+               00016 ;
+               00017 ;       brother desmond proyect
+               00018 ;       hello world
+               00019 ; by mn@d23.synlabs.com.ar
+               00020 ;       2012/11/12
+               00021 ;
+               00022 ; uc [ pic16F84A ]
+               00023 ;       RB0-RB7 output 1/5s ON 4/5 OFF sequential sweep/cycle
+               00024 ;
+               00025 
+Warning [215] : Processor superseded by command line.
+               00026 LIST    p=16F84a
+Warning [205] : Found directive in column 1.
+               00027 RADIX   hex
+Warning [205] : Found directive in column 1.
+002007 0000    00028 __CONFIG _XT_OSC & _WDT_OFF & _PWRTE_ON & _CP_OFF
+               00029 #INCLUDE <p16f84a.inc>
+               00001         LIST
+               00002 ; P16F84A.INC  Standard Header File, Version 2.00    Microchip Technology, Inc.
+               00134         LIST
+               00030 
+               00031 ;----------------------------------------------------------------------
+               00032 ;       cpu equates (memory map)
+               00033 
+  00000006     00034 portB           equ     0x06                                                    ; (p. 10 defines port address)
+  0000000C     00035 count           equ     0x0c
+  0000000D     00036 nCount  equ     0x0d
+  0000000E     00037 mCount  equ     0x0e
+               00038 
+               00039 ;----------------------------------------------------------------------
+               00040 
+               00041 ;----------------------------------------------------------------------
+               00042 ;       main
+               00043 
+               00044         org     0x000
+               00045 
+0000 3000      00046 start           movlw   0x00                                            ; load W with 0x00 make port B output (p. 45)
+Warning [224] : Use of this instruction is not recommended.
+0001 0066      00047         tris    portB                                                                   ; copy W tristate, port B outputs (p. 58)
+gpasm-0.13.7 beta               syntrip.asm 11-12-2012  17:30:49         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0002 0186      00048         clrf    portB                                                                   ; clear all lines low
+0003 018C      00049         clrf    count                                                                   ; initialize counter to 0
+0004 080C      00050 get_cnt movf    count, w                                ; move count to W
+0005 0086      00051         movwf   portB                                                                   ; move W to port B
+0006 2000      00052         call    pause                                                                   ; delay by subroutine
+0007 2000      00053         call    pause           
+0008 2000      00054         call    pause
+0009 2000      00055         call    pause
+000A 2000      00056         call    pause                                                                   ; five pause executions equals ~ 1 second
+               00057 
+000B 3001      00058         movlw 0x01                                                                      ; [s] RB0 1 200ms 0 800ms
+000C 0086      00059         movwf portB
+000D 2000      00060         call    pause           
+000E 0186      00061         clrf    portB
+000F 2000      00062         call    pause
+0010 2000      00063         call    pause
+0011 2000      00064         call    pause
+0012 2000      00065         call    pause                                                                   ; end first character
+               00066 
+0013 3002      00067         movlw 0x02                                                                      ; [y] RB1 1 200ms 0 800ms
+0014 0086      00068         movwf portB
+0015 2000      00069         call    pause           
+0016 0186      00070         clrf    portB
+0017 2000      00071         call    pause
+0018 2000      00072         call    pause
+0019 2000      00073         call    pause
+001A 2000      00074         call    pause                                                                   ; end 2nd character
+               00075 
+001B 3004      00076         movlw 0x04                                                                      ; [n] RB2 1 200ms 0 800ms
+001C 0086      00077         movwf portB
+001D 2000      00078         call    pause           
+001E 0186      00079         clrf    portB
+001F 2000      00080         call    pause
+0020 2000      00081         call    pause
+0021 2000      00082         call    pause
+0022 2000      00083         call    pause                                                                   ; end 3rd character
+               00084 
+0023 3008      00085         movlw 0x08                                                                      ; [t] RB3 1 200ms 0 800ms
+0024 0086      00086         movwf portB
+0025 2000      00087         call    pause           
+0026 0186      00088         clrf    portB
+0027 2000      00089         call    pause
+0028 2000      00090         call    pause
+0029 2000      00091         call    pause
+002A 2000      00092         call    pause                                                                   ; end 4th character
+               00093 
+002B 2800      00094         goto    break                                                                   ; XXX test break jump
+               00095 
+002C 3010      00096         movlw 0x10                                                                      ; [r] RB4 1 200ms 0 800ms
+002D 0086      00097         movwf portB
+002E 2000      00098         call    pause           
+002F 0186      00099         clrf    portB
+0030 2000      00100         call    pause
+0031 2000      00101         call    pause
+gpasm-0.13.7 beta               syntrip.asm 11-12-2012  17:30:49         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+0032 2000      00102         call    pause
+0033 2000      00103         call    pause                                                                   ; end 5th character
+               00104 
+0034 3020      00105         movlw 0x20                                                                      ; [i] RB5 1 200ms 0 800ms
+0035 0086      00106         movwf portB
+0036 2000      00107         call    pause           
+0037 0186      00108         clrf    portB
+0038 2000      00109         call    pause
+0039 2000      00110         call    pause
+003A 2000      00111         call    pause
+003B 2000      00112         call    pause                                                                   ; end 6th character
+               00113 
+003C 3040      00114         movlw 0x40                                                                      ; [p] RB6 1 200ms 0 800ms
+003D 0086      00115         movwf portB
+003E 2000      00116         call    pause           
+003F 0186      00117         clrf    portB
+0040 2000      00118         call    pause
+0041 2000      00119         call    pause
+0042 2000      00120         call    pause
+0043 2000      00121         call    pause                                                                   ; end 7th character
+               00122 
+0044 3080      00123         movlw 0x80                                                                      ; [.] RB7 1 200ms 0 800ms
+0045 0086      00124         movwf portB
+0046 2000      00125         call    pause           
+0047 0186      00126         clrf    portB
+0048 2000      00127         call    pause
+0049 2000      00128         call    pause
+004A 2000      00129         call    pause
+004B 2000      00130         call    pause                                                                   ; end last character
+               00131 
+004C 2800      00132 stop    goto    stop
+               00133 
+004D 00134 break
+004D 00135 blink
+004D 300F      00136         movlw 0x0F                                                                      ; RB0-RB3 1 200ms 0 800ms
+004E 0086      00137         movwf portB
+004F 2000      00138         call    pause           
+0050 0186      00139         clrf    portB
+0051 2000      00140         call    pause
+0052 2000      00141         call    pause
+0053 2000      00142         call    pause
+0054 2000      00143         call    pause                                                                   ; inf cycle
+Warning [203] : Found opcode in column 1.
+0055 2800      00144 goto blink
+               00145 
+               00146 ;----------------------------------------------------------------------
+               00147 ;       subroutines
+               00148 
+               00149 ; pause ~250ms
+0056 30FF      00150 pause                   movlw   0xff                                    ; set w = 255 decimal
+0057 008E      00151         movwf           mCount                                                  ; mCount = w
+0058 30FF      00152 loadN                   movlw   0xff                                    ; set w = 255 decimal
+0059 008D      00153         movwf           nCount                                                  ; nCount = w
+005A 0B8D      00154 decN                    decfsz  nCount, f               ; nCount--
+gpasm-0.13.7 beta               syntrip.asm 11-12-2012  17:30:49         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+005B 2800      00155         goto            decN                                                            ; if nCount != 0 then repeat nCount--
+005C 0B8E      00156         decfsz  mCount, f                                               ; else decrement Count
+005D 2800      00157         goto            loadN                                                           ; if mCount != 0 then 
+               00158                                                                                                                         ;   reload nCount to 255 and decrement
+005E 0008      00159         return                                                                                  ; else exit subroutine
+               00160 
+gpasm-0.13.7 beta               syntrip.asm 11-12-2012  17:30:49         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TRISA                             00000085
+TRISB                             00000086
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_HS_OSC                           00003FFE
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+gpasm-0.13.7 beta               syntrip.asm 11-12-2012  17:30:49         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+ 
+_RC_OSC                           00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+blink                             0000004D
+break                             0000004D
+count                             0000000C
+decN                              0000005A
+get_cnt                           00000004
+loadN                             00000058
+mCount                            0000000E
+nCount                            0000000D
+pause                             00000056
+portB                             00000006
+start                             00000000
+stop                              0000004C
+
+
+Errors   :       0
+Warnings :       5 reported,       0 suppressed
+Messages :       0 reported,       0 suppressed
+
